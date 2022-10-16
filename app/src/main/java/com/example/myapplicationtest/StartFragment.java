@@ -25,12 +25,13 @@ public class StartFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.mybutton =  view.findViewById(R.id.start_button);
+        this.mybutton = view.findViewById(R.id.start_button);
 
         View.OnClickListener click_button = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mybutton.setText("Clicked");
+                MainGameFragment main_game_fragment = MainGameFragment.newInstance("test_value");
+                getParentFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment_container, main_game_fragment).commit();
             }
         };
         mybutton.setOnClickListener(click_button);
