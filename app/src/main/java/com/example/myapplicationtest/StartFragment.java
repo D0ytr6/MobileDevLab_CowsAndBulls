@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class StartFragment extends Fragment {
 
-    private Button mybutton;
+    private Button button_start, button_about, button_close;
 
     @Nullable
     @Override
@@ -25,16 +25,28 @@ public class StartFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.mybutton = view.findViewById(R.id.start_button);
+        this.button_start = view.findViewById(R.id.start_button);
+        this.button_about = view.findViewById(R.id.about_button);
 
-        View.OnClickListener click_button = new View.OnClickListener() {
+        View.OnClickListener click_button_start = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainGameFragment main_game_fragment = MainGameFragment.newInstance("test_value");
                 getParentFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment_container, main_game_fragment).commit();
             }
         };
-        mybutton.setOnClickListener(click_button);
+
+        View.OnClickListener click_button_about = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AboutFragment fragment = AboutFragment.newInstance("test_value");
+                getParentFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment_container, fragment).commit();
+            }
+        };
+
+
+        button_start.setOnClickListener(click_button_start);
+        button_about.setOnClickListener(click_button_about);
 
     }
 }
