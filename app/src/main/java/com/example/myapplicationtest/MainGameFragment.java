@@ -13,7 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MainGameFragment extends Fragment {
 
@@ -50,6 +52,31 @@ public class MainGameFragment extends Fragment {
 
     }
 
+    public ArrayList<Integer> Generate_Numbers(int size){
+        if(size == 4){
+            Random random = new Random();
+            ArrayList<Integer> array = new ArrayList<Integer>();
+            for(int i = 0; i < size; i++){
+                boolean isGen = false;
+                while (isGen != true){
+                    int rnd_n = random.nextInt(9);
+                    for (Integer num:array) {
+                        if(num == rnd_n){
+
+                        }
+                    }
+                }
+
+            }
+
+
+
+
+            return array;
+        }
+
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -66,6 +93,8 @@ public class MainGameFragment extends Fragment {
         this.bt8 = view.findViewById(R.id.button_8);
         this.bt9 = view.findViewById(R.id.button_9);
 
+        ArrayList<Integer> gen_number = new ArrayList<Integer>();
+
         View.OnClickListener click_button_submit= new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +107,7 @@ public class MainGameFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 EditText input_view = view.findViewById(R.id.pressed_view);
-                if(input_view.getText().toString() == ""){
+                if(input_view.getText().length() != 0){
                     String text = input_view.getText().toString();
                     text = text.substring(0, (text.length() - 1));
                     input_view.setText(text);
