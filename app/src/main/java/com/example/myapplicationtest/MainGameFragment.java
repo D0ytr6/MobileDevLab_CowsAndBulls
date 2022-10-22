@@ -9,17 +9,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import java.util.Random;
 
 public class MainGameFragment extends Fragment {
 
@@ -28,15 +24,20 @@ public class MainGameFragment extends Fragment {
     private ResultAdapter adapter;
     private ArrayList<ResultState> states = new ArrayList<ResultState>();
 
-    private static final String ARG_PARAM = "VALUE";
-    private List <Button> number_buttons;
+    static String ARG_PARAM_DIFFICULT;
+    private static int number_count;
+
+    private Button[] number_buttons = {bt0, bt1, bt2, bt3, bt4, bt5, bt6, bt7, bt8, bt9};
+    private Integer[] id_buttons_res = {R.id.button_0, R.id.button_1, R.id.button_2, R.id.button_3, R.id.button_4, R.id.button_5, R.id.button_6, R.id.button_7, R.id.button_8, R.id.button_9};
+
     ListView try_list;
 
-    public static MainGameFragment newInstance(String param1) {
+    private int try_count = 0;
+
+    public static MainGameFragment newInstance(String difficult) {
         MainGameFragment fragment = new MainGameFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM, param1);
-
+        args.putString(ARG_PARAM_DIFFICULT, difficult);
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,9 +46,8 @@ public class MainGameFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_main_window, container, false);
-
         // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_main_window, container, false);
         // return view
         return view;
     }
@@ -55,10 +55,9 @@ public class MainGameFragment extends Fragment {
     public void CheckText(EditText input_view, String number){
         if(input_view.getText() != null){
             String text = input_view.getText().toString();
-            if(text.length() != 4){
+            if(text.length() != number_count){
                 input_view.append(number);
             }
-
         }
         else{
             input_view.append(number);
@@ -66,26 +65,18 @@ public class MainGameFragment extends Fragment {
 
     }
 
-//    private ArrayList<Integer> shuffle_add_data(int size){
-//        ArrayList<Integer> list_all_numbers = new ArrayList<Integer>();
-//        for(int i = 0 ; i < 10; i++){
-//            list_all_numbers.add(i);
-//        }
-//
-//    }
-
     public ArrayList<Integer> Generate_Numbers(int size){
         ArrayList<Integer> game_numbers = new ArrayList<Integer>();
         ArrayList<Integer> list_all_numbers = new ArrayList<Integer>();
         for(int i = 0 ; i < 10; i++){
             list_all_numbers.add(i);
         }
-        if(size == 4){
-            Collections.shuffle(list_all_numbers);
-            for(int k = 0; k < size; k++){
-                game_numbers.add(list_all_numbers.get(k));
-            }
+
+        Collections.shuffle(list_all_numbers);
+        for(int k = 0; k < size; k++){
+            game_numbers.add(list_all_numbers.get(k));
         }
+
         return game_numbers;
     }
 
@@ -98,71 +89,51 @@ public class MainGameFragment extends Fragment {
         });
     }
 
-    private void setInitialData(){
-        states.add(new ResultState ("9789", "0 Bulls 0 Cows"));
-        states.add(new ResultState ("9789", "0 Bulls 0 Cows"));
-        states.add(new ResultState ("9789", "0 Bulls 0 Cows"));
-        states.add(new ResultState ("9789", "0 Bulls 0 Cows"));
-        states.add(new ResultState ("9789", "0 Bulls 0 Cows"));
-        states.add(new ResultState ("9789", "0 Bulls 0 Cows"));
-        states.add(new ResultState ("9789", "0 Bulls 0 Cows"));
-        states.add(new ResultState ("9789", "0 Bulls 0 Cows"));
-        states.add(new ResultState ("9789", "0 Bulls 0 Cows"));
-        states.add(new ResultState ("9789", "0 Bulls 1 Cows"));
-        states.add(new ResultState ("9789", "0 Bulls 1 Cows"));
+    private void SetgameDifficult(){
+        String t = getArguments().getString(ARG_PARAM_DIFFICULT);
+        switch (t){
+            case "Low":
+                number_count = 4; break;
+            case "Medium":
+                number_count = 5; break;
+            case "High":
+                number_count = 6; break;
+        }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        SetgameDifficult();
+
         this.submit_button = view.findViewById(R.id.button_submit);
         this.del_button = view.findViewById(R.id.button_del);
-        this.bt0 = view.findViewById(R.id.button_0);
-        this.bt1 = view.findViewById(R.id.button_1);
-        this.bt2 = view.findViewById(R.id.button_2);
-        this.bt3 = view.findViewById(R.id.button_3);
-        this.bt4 = view.findViewById(R.id.button_4);
-        this.bt5 = view.findViewById(R.id.button_5);
-        this.bt6 = view.findViewById(R.id.button_6);
-        this.bt7 = view.findViewById(R.id.button_7);
-        this.bt8 = view.findViewById(R.id.button_8);
-        this.bt9 = view.findViewById(R.id.button_9);
+
+        for (int btn = 0; btn < 10; btn++) {
+            number_buttons[btn] = view.findViewById(id_buttons_res[btn]);
+        }
 
         this.try_list = view.findViewById(R.id.try_list);
-        setInitialData();
         adapter = new ResultAdapter(getContext(), states);
         try_list.setAdapter(adapter);
 
-        ArrayList<Integer> generate = Generate_Numbers(4); // Generate a number
-
-//        ArrayList<String> TestList = new ArrayList<String>();
-//
-//        for(int i = 0; i < 10; i++){
-//            TestList.add("Test");
-//        }
-
-//        // создаем адаптер
-//        this.adapter = new ArrayAdapter(getContext(),
-//                android.R.layout.simple_list_item_1, TestList);
-//
-//        // устанавливаем для списка адаптер
-//        countriesList.setAdapter(adapter);
-
+        ArrayList<Integer> generate = Generate_Numbers(number_count); // Generate a number
 
         View.OnClickListener click_button_submit= new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                ArrayList<Integer> temp = generate;
+                ArrayList<Integer> temp = new ArrayList<Integer>(generate);
                 EditText input_view = view.findViewById(R.id.pressed_view);
                 String input_text = input_view.getText().toString();
                 int Cows = 0;
                 int Bulls = 0;
-                if (input_text.length() == 4){
-                    for(int i = 0; i < 4; i++){
-                        if(Character.toString(input_text.charAt(i)) == Integer.toString(temp.get(i))){
+                if (input_text.length() == number_count){
+                    for(int i = 0; i < number_count; i++){
+                        String temp_char = Character.toString(input_text.charAt(i));
+                        String temp_arr = Integer.toString(generate.get(i));
+                        if(temp_char.equals(temp_arr)){
                             Bulls++;
-                            temp.remove(i);
+                            temp.remove(generate.get(i));
                         }
                     }
 
@@ -172,24 +143,24 @@ public class MainGameFragment extends Fragment {
                         }
                     }
 
+                    try_count++;
                     String result_points = String.format("%d Bulls %d Cows", Bulls, Cows);
-                    ResultState res = new ResultState (input_text, result_points);
+                    ResultState res = new ResultState (input_text, result_points, try_count);
+                    input_view.setText(""); // clear input
+
+                    if(Bulls == number_count){
+                        String congrat =  String.format("Congratulations you passed in %d tries!", try_count);
+                        TextView congrat_view = view.findViewById(R.id.text_result);
+                        congrat_view.setText(congrat);
+                    }
                     Cows = 0;
                     Bulls = 0;
                     adapter.add(res);
                     scrollToBottom();
                 }
-
-//                EditText input_view = view.findViewById(R.id.pressed_view);
-//                ArrayList<Integer> generate = Generate_Numbers(4);
-//                for (int n: generate) {
-//                    input_view.append(Integer.toString(n));
-//
-//                }
-//                adapter.add(new ResultState("2211", "1 Bulls 0 Cows"));
-//                scrollToBottom();
-
-
+                else {
+                    input_view.setError("Must be 4 numbs");
+                }
 
             }
         };
@@ -245,23 +216,13 @@ public class MainGameFragment extends Fragment {
             }
         };
 
-
         submit_button.setOnClickListener(click_button_submit);
         del_button.setOnClickListener(click_button_del);
-        bt0.setOnClickListener(click_numbers);
-        bt1.setOnClickListener(click_numbers);
-        bt2.setOnClickListener(click_numbers);
-        bt3.setOnClickListener(click_numbers);
-        bt4.setOnClickListener(click_numbers);
-        bt5.setOnClickListener(click_numbers);
-        bt6.setOnClickListener(click_numbers);
-        bt7.setOnClickListener(click_numbers);
-        bt8.setOnClickListener(click_numbers);
-        bt9.setOnClickListener(click_numbers);
 
-
+        for (Button btn: number_buttons) {
+            btn.setOnClickListener(click_numbers);
+        }
 
     }
-
 
 }

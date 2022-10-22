@@ -12,25 +12,13 @@
         android:layout_height="0dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintHeight_default="percent"
         app:layout_constraintHeight_percent="0.1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/input_view"
-            android:text="Input:"
-            android:textSize="26dp"
-            android:layout_width="0dp"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.33"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/pressed_view"
-            />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/try_list">
 
         <EditText
             android:id="@+id/pressed_view"
@@ -38,10 +26,9 @@
             android:focusableInTouchMode="false"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.66"
+            android:textSize="25sp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/input_view"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             />
 
@@ -51,13 +38,27 @@
         android:id="@+id/try_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:divider="@null"
         app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintHeight_percent="0.55"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/input_block"
-        app:layout_constraintBottom_toTopOf="@id/button_block"
+        app:layout_constraintBottom_toTopOf="@id/text_result"
+        app:layout_constraintVertical_bias="0.0"
 
+        />
+
+    <TextView
+        android:id="@+id/text_result"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/try_list"
+        app:layout_constraintBottom_toTopOf="@id/button_block"
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -69,6 +70,7 @@
         android:layout_marginBottom="20dp"
         app:layout_constraintHeight_default="percent"
         app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintTop_toBottomOf="@id/text_result"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">

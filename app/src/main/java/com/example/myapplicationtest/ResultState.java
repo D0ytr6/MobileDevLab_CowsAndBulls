@@ -6,13 +6,13 @@ public class ResultState {
 
     private String input_value;
     private String result;
-    private int child_num;
-    private static final AtomicInteger COUNTER = new AtomicInteger(1);
+    private int counter;
 
-    public ResultState(String input, String res) {
+
+    public ResultState(String input, String res, int count) {
         this.input_value = input;
         this.result = res;
-        this.child_num = COUNTER.getAndIncrement();
+        this.counter = count;
     }
 
     public String getInput_value() {
@@ -31,11 +31,11 @@ public class ResultState {
         this.result = result;
     }
 
-    public int getChild_num() {
-        return child_num;
+    public int getCounter() {
+        return counter;
     }
 
-    public void setChild_num(int child_num) {
-        this.child_num = child_num;
+    public void setCounter(int counter) {
+        this.counter = counter;
     }
 }

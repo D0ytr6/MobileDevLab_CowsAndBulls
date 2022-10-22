@@ -47,7 +47,7 @@ public class ResultAdapter extends ArrayAdapter<ResultState> {
         TextView input_v = (TextView) convertView.findViewById(R.id.input_number);
         TextView result_v = (TextView) convertView.findViewById(R.id.result);
 
-        inc.setText(Integer.toString(result.getChild_num()));
+        inc.setText(Integer.toString(result.getCounter()));
         input_v.setText(result.getInput_value());
         result_v.setText(result.getResult());
 
