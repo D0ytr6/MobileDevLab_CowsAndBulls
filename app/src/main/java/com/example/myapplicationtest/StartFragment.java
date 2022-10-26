@@ -1,5 +1,6 @@
 package com.example.myapplicationtest;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,15 +22,39 @@ public class StartFragment extends Fragment {
 
     private String[] difficulties = {"Low", "Medium", "High"};
     private String game_difficult = "Low";
+    private LayoutInflater inflater;
+    private  ViewGroup container;
 
     AutoCompleteTextView drop_menu;
     ArrayAdapter<String> menu_items_adapter;
 
+
+    public View InitializeUserInterface(){
+        View view;
+        int orientation = getActivity().getResources().getConfiguration().orientation;
+
+        if(orientation == Configuration.ORIENTATION_PORTRAIT){
+            view = inflater.inflate(R.layout.fragment_start_game_menu, container, false);
+        }
+        else{
+            view = inflater.inflate(R.layout.fragment_start_game_menu_horizontal, container, false);
+        }
+        return view;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_start_game_menu, container, false);
-        return view;
+        this.inflater = inflater;
+        this.container = container;
+
+        if(savedInstanceState == null){
+        }else {
+            String Difficult = savedInstanceState.getString("dif");
+            game_difficult = Difficult;
+        }
+//        View view = inflater.inflate(R.layout.fragment_start_game_menu, container, false);
+        return InitializeUserInterface();
     }
 
     @Override
@@ -37,6 +62,24 @@ public class StartFragment extends Fragment {
         super.onResume();
         menu_items_adapter = new ArrayAdapter<String>(getContext(), R.layout.dropdown_item, difficulties);
         this.drop_menu.setAdapter(menu_items_adapter);
+    }
+
+//    @Override
+//    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+//
+//        String game_dif = drop_menu.getText().toString();
+//        View view = InitializeUserInterface();
+//        drop_menu.setText(game_dif);
+////        game_difficult = game_dif;
+//        container.addView(view);
+//        super.onConfigurationChanged(newConfig);
+//    }
+
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("dif", game_difficult);
     }
 
     @Override

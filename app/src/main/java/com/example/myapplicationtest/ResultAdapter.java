@@ -20,7 +20,6 @@ public class ResultAdapter extends ArrayAdapter<ResultState> {
     Context context;
     LayoutInflater inflater;
     ArrayList<ResultState> result_list_data;
-    int try_counter = 0;
 
     public ResultAdapter(Context context, @NonNull ArrayList<ResultState> objects) {
         super(context, 0, objects);
@@ -28,6 +27,10 @@ public class ResultAdapter extends ArrayAdapter<ResultState> {
         this.inflater = LayoutInflater.from(context);
         this.result_list_data = objects;
 
+    }
+
+    public ArrayList<ResultState> getValueList(){
+        return result_list_data;
     }
 
     @Override
@@ -41,18 +44,16 @@ public class ResultAdapter extends ArrayAdapter<ResultState> {
             convertView = inflater.inflate(R.layout.result_list_item, parent, false);
         }
         ResultState result = result_list_data.get(position);
-        try_counter++;
 
         TextView inc = (TextView) convertView.findViewById(R.id.first_try);
         TextView input_v = (TextView) convertView.findViewById(R.id.input_number);
         TextView result_v = (TextView) convertView.findViewById(R.id.result);
 
-        inc.setText(Integer.toString(result.getCounter()));
+        inc.setText(result.getCounter());
         input_v.setText(result.getInput_value());
         result_v.setText(result.getResult());
 
         return convertView;
     }
-
 
 }

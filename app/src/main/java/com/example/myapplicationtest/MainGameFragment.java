@@ -1,5 +1,6 @@
 package com.example.myapplicationtest;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,10 +21,11 @@ import java.util.Collections;
 public class MainGameFragment extends Fragment {
 
     private Button submit_button, del_button, bt0, bt1, bt2, bt3, bt4, bt5, bt6, bt7, bt8, bt9;
-
+    private LayoutInflater inflater;
+    private ViewGroup container;
     private ResultAdapter adapter;
     private ArrayList<ResultState> states = new ArrayList<ResultState>();
-
+    private TextView input_view;
     static String ARG_PARAM_DIFFICULT;
     private static int number_count;
 
@@ -42,12 +44,47 @@ public class MainGameFragment extends Fragment {
         return fragment;
     }
 
+
+    public View InitializeUserInterface(){
+        View view;
+        int orientation = getActivity().getResources().getConfiguration().orientation;
+
+        if(orientation == Configuration.ORIENTATION_PORTRAIT){
+            view = inflater.inflate(R.layout.fragment_main_window, container, false);
+        }
+        else{
+            view = inflater.inflate(R.layout.fragment_main_window_horizontal, container, false);
+        }
+        return view;
+    }
+
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("list", states);
+        outState.putInt("try_num", try_count);
+        outState.putString("input_val", input_view.getText().toString());
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        this.inflater = inflater;
+        this.container = container;
+
+        View view = InitializeUserInterface();
+        this.input_view = view.findViewById(R.id.pressed_view);
+
+        if(savedInstanceState == null){
+        }else {
+            states = savedInstanceState.getParcelableArrayList("list");
+            try_count = savedInstanceState.getInt("try_num");
+            input_view.setText(savedInstanceState.getString("input_val"));
+        }
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_main_window, container, false);
+//        View view = inflater.inflate(R.layout.fragment_main_window, container, false);
         // return view
         return view;
     }
@@ -108,6 +145,7 @@ public class MainGameFragment extends Fragment {
 
         this.submit_button = view.findViewById(R.id.button_submit);
         this.del_button = view.findViewById(R.id.button_del);
+        this.input_view = view.findViewById(R.id.pressed_view);
 
         for (int btn = 0; btn < 10; btn++) {
             number_buttons[btn] = view.findViewById(id_buttons_res[btn]);
@@ -123,7 +161,6 @@ public class MainGameFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ArrayList<Integer> temp = new ArrayList<Integer>(generate);
-                EditText input_view = view.findViewById(R.id.pressed_view);
                 String input_text = input_view.getText().toString();
                 int Cows = 0;
                 int Bulls = 0;
@@ -145,7 +182,7 @@ public class MainGameFragment extends Fragment {
 
                     try_count++;
                     String result_points = String.format("%d Bulls %d Cows", Bulls, Cows);
-                    ResultState res = new ResultState (input_text, result_points, try_count);
+                    ResultState res = new ResultState (input_text, result_points, Integer.toString(try_count));
                     input_view.setText(""); // clear input
 
                     if(Bulls == number_count){
