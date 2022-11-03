@@ -53,7 +53,6 @@ public class StartFragment extends Fragment {
             String Difficult = savedInstanceState.getString("dif");
             game_difficult = Difficult;
         }
-//        View view = inflater.inflate(R.layout.fragment_start_game_menu, container, false);
         return InitializeUserInterface();
     }
 
@@ -63,17 +62,6 @@ public class StartFragment extends Fragment {
         menu_items_adapter = new ArrayAdapter<String>(getContext(), R.layout.dropdown_item, difficulties);
         this.drop_menu.setAdapter(menu_items_adapter);
     }
-
-//    @Override
-//    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-//
-//        String game_dif = drop_menu.getText().toString();
-//        View view = InitializeUserInterface();
-//        drop_menu.setText(game_dif);
-////        game_difficult = game_dif;
-//        container.addView(view);
-//        super.onConfigurationChanged(newConfig);
-//    }
 
 
     @Override

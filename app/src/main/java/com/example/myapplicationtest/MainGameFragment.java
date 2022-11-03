@@ -87,9 +87,6 @@ public class MainGameFragment extends Fragment {
             generate = savedInstanceState.getIntegerArrayList("generate_numbers");
         }
 
-        // Inflate the layout for this fragment
-//        View view = inflater.inflate(R.layout.fragment_main_window, container, false);
-        // return view
         return view;
     }
 
@@ -256,7 +253,6 @@ public class MainGameFragment extends Fragment {
                     case R.id.button_9:
                         CheckText(input_view, "9"); break;
                 }
-
             }
         };
 
