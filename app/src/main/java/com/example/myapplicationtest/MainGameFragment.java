@@ -35,6 +35,8 @@ public class MainGameFragment extends Fragment {
     ListView try_list;
 
     private int try_count = 0;
+    private ArrayList<Integer> generate;
+
 
     public static MainGameFragment newInstance(String difficult) {
         MainGameFragment fragment = new MainGameFragment();
@@ -65,6 +67,7 @@ public class MainGameFragment extends Fragment {
         outState.putParcelableArrayList("list", states);
         outState.putInt("try_num", try_count);
         outState.putString("input_val", input_view.getText().toString());
+        outState.putIntegerArrayList("generate_numbers", generate);
     }
 
     @Override
@@ -81,6 +84,7 @@ public class MainGameFragment extends Fragment {
             states = savedInstanceState.getParcelableArrayList("list");
             try_count = savedInstanceState.getInt("try_num");
             input_view.setText(savedInstanceState.getString("input_val"));
+            generate = savedInstanceState.getIntegerArrayList("generate_numbers");
         }
 
         // Inflate the layout for this fragment
@@ -141,6 +145,7 @@ public class MainGameFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         SetgameDifficult();
 
         this.submit_button = view.findViewById(R.id.button_submit);
@@ -155,7 +160,9 @@ public class MainGameFragment extends Fragment {
         adapter = new ResultAdapter(getContext(), states);
         try_list.setAdapter(adapter);
 
-        ArrayList<Integer> generate = Generate_Numbers(number_count); // Generate a number
+        if(generate == null){
+            this.generate = Generate_Numbers(number_count); // Generate a number
+        }
 
         View.OnClickListener click_button_submit= new View.OnClickListener() {
             @Override
