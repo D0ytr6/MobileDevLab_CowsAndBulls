@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
         android:layout_marginTop="50dp"
-        android:src="@drawable/cow_pic"/>
+        android:src="@drawable/cow_pic" />
 
     <Button
         android:id="@+id/start_btn"
@@ -55,9 +55,9 @@
         android:id="@+id/close_btn"
         android:layout_width="200dp"
         android:layout_height="80dp"
-        android:layout_marginTop="20dp"
         android:layout_below="@id/about_btn"
         android:layout_centerInParent="true"
-        android:text="About" />
+        android:layout_marginTop="20dp"
+        android:text="Close" />
 
 </RelativeLayout>

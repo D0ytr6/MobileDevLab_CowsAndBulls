@@ -2,10 +2,9 @@ package com.example.myapplicationtest;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,13 +12,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_relative_start_window);
+        Button button_start = findViewById(R.id.start_btn);
+//        button_about = view.findViewById(R.id.about_button);
+//        button_close = view.findViewById(R.id.close_button);
 
-        // First start
-        if(savedInstanceState == null){
-            StartFragment startFragment = new StartFragment();
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, startFragment).commit();
-        }
 
     }
 
