@@ -1,4 +1,4 @@
-package com.example.myapplicationtest;
+package com.example.myapplicationtest.fragments;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -15,6 +15,10 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.example.myapplicationtest.R;
+import com.example.myapplicationtest.fragments.AboutFragment;
+import com.example.myapplicationtest.fragments.MainGameFragment;
 
 public class StartFragment extends Fragment {
 

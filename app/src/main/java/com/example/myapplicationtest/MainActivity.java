@@ -13,6 +13,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.myapplicationtest.activities.AboutAuthorActivity;
+import com.example.myapplicationtest.activities.MainGameActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button button_start, button_about, button_close;

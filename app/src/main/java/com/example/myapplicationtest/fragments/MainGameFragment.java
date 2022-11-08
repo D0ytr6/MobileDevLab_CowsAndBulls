@@ -1,12 +1,12 @@
-package com.example.myapplicationtest;
+package com.example.myapplicationtest.fragments;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +15,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.myapplicationtest.R;
+import com.example.myapplicationtest.ResultAdapter;
+import com.example.myapplicationtest.ResultState;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class MainGameActivity extends AppCompatActivity implements TaskListener{
-
-    App app;
+public class MainGameFragment extends Fragment {
 
     private Button submit_button, del_button, bt0, bt1, bt2, bt3, bt4, bt5, bt6, bt7, bt8, bt9;
     private LayoutInflater inflater;
@@ -28,7 +30,7 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener{
     private ResultAdapter adapter;
     private ArrayList<ResultState> states = new ArrayList<ResultState>();
     private TextView input_view;
-    private String ARG_PARAM_DIFFICULT;
+    static String ARG_PARAM_DIFFICULT;
     private static int number_count;
 
     private Button[] number_buttons = {bt0, bt1, bt2, bt3, bt4, bt5, bt6, bt7, bt8, bt9};
@@ -39,17 +41,29 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener{
     private int try_count = 0;
     private ArrayList<Integer> generate;
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        app.addListener(this); // this because activity implements task listener interface
+
+    public static MainGameFragment newInstance(String difficult) {
+        MainGameFragment fragment = new MainGameFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM_DIFFICULT, difficult);
+        fragment.setArguments(args);
+        return fragment;
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        app.removeListener(this);
+
+    public View InitializeUserInterface(){
+        View view;
+        int orientation = getActivity().getResources().getConfiguration().orientation;
+
+        if(orientation == Configuration.ORIENTATION_PORTRAIT){
+            view = inflater.inflate(R.layout.fragment_main_window, container, false);
+        }
+        else{
+            view = inflater.inflate(R.layout.fragment_main_window_horizontal, container, false);
+        }
+        return view;
     }
+
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -58,9 +72,27 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener{
         outState.putInt("try_num", try_count);
         outState.putString("input_val", input_view.getText().toString());
         outState.putIntegerArrayList("generate_numbers", generate);
-        outState.putInt("num_count", number_count);
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        this.inflater = inflater;
+        this.container = container;
+
+        View view = InitializeUserInterface();
+        this.input_view = view.findViewById(R.id.pressed_view);
+
+        if(savedInstanceState == null){
+        }else {
+            states = savedInstanceState.getParcelableArrayList("list");
+            try_count = savedInstanceState.getInt("try_num");
+            input_view.setText(savedInstanceState.getString("input_val"));
+            generate = savedInstanceState.getIntegerArrayList("generate_numbers");
+        }
+
+        return view;
+    }
 
     public void CheckText(EditText input_view, String number){
         if(input_view.getText() != null){
@@ -94,14 +126,14 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener{
         try_list.post(new Runnable() {
             @Override
             public void run() {
-
                 try_list.smoothScrollToPosition(adapter.getCount() - 1);
             }
         });
     }
 
     private void SetgameDifficult(){
-        switch (ARG_PARAM_DIFFICULT){
+        String t = getArguments().getString(ARG_PARAM_DIFFICULT);
+        switch (t){
             case "Low":
                 number_count = 4; break;
             case "Medium":
@@ -111,77 +143,77 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener{
         }
     }
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        app = (App) getApplication();
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
+        SetgameDifficult();
 
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            setContentView(R.layout.activity_relative_main_window);
-        }
-        else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-            setContentView(R.layout.activity_relative_main_horizontal);
-        }
-
-        if(savedInstanceState == null){
-            Bundle arguments = getIntent().getExtras();
-            this.ARG_PARAM_DIFFICULT = arguments.get("difficult").toString(); // Get Difficult param
-            SetgameDifficult();
-        }
-        else {
-            this.input_view = findViewById(R.id.pressed_view);
-            states = savedInstanceState.getParcelableArrayList("list");
-            try_count = savedInstanceState.getInt("try_num");
-            input_view.setText(savedInstanceState.getString("input_val"));
-            generate = savedInstanceState.getIntegerArrayList("generate_numbers");
-            number_count = savedInstanceState.getInt("num_count");
-        }
-
-        this.submit_button = findViewById(R.id.button_submit);
-        this.del_button = findViewById(R.id.button_del);
-        this.input_view = findViewById(R.id.pressed_view);
+        this.submit_button = view.findViewById(R.id.button_submit);
+        this.del_button = view.findViewById(R.id.button_del);
+        this.input_view = view.findViewById(R.id.pressed_view);
 
         for (int btn = 0; btn < 10; btn++) {
-            number_buttons[btn] = findViewById(id_buttons_res[btn]);
+            number_buttons[btn] = view.findViewById(id_buttons_res[btn]);
         }
 
-        this.try_list = findViewById(R.id.try_list);
-        adapter = new ResultAdapter(MainGameActivity.this, states);
+        this.try_list = view.findViewById(R.id.try_list);
+        adapter = new ResultAdapter(getContext(), states);
         try_list.setAdapter(adapter);
 
         if(generate == null){
-            //this.generate = Generate_Numbers(number_count); // Generate a number
-            Intent intent = new Intent(this, GameService.class);
-            intent.setAction(GameService.ACTION_GENERATE);
-            intent.putExtra(GameService.SIZE_NUMBER, number_count);
-            startService(intent);
+            this.generate = Generate_Numbers(number_count); // Generate a number
         }
 
         View.OnClickListener click_button_submit= new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (input_view.getText().toString().length() == number_count ){
+                ArrayList<Integer> temp = new ArrayList<Integer>(generate);
+                String input_text = input_view.getText().toString();
+                int Cows = 0;
+                int Bulls = 0;
+                if (input_text.length() == number_count){
+                    for(int i = 0; i < number_count; i++){
+                        String temp_char = Character.toString(input_text.charAt(i));
+                        String temp_arr = Integer.toString(generate.get(i));
+                        if(temp_char.equals(temp_arr)){
+                            Bulls++;
+                            temp.remove(generate.get(i));
+                        }
+                    }
+
+                    for (int num: temp) {
+                        if(input_text.contains(Integer.toString(num))){
+                            Cows++;
+                        }
+                    }
+
                     try_count++;
-                    Intent intent = new Intent(getBaseContext(), GameService.class);
-                    intent.setAction(GameService.ACTION_PARSE_SCORES);
-                    intent.putIntegerArrayListExtra(GameService.GENERATED_NUMBERS, generate);
-                    intent.putExtra(GameService.INPUT_NUMBERS, input_view.getText().toString());
-                    intent.putExtra(GameService.NUMBER_COUNT, number_count);
-                    intent.putExtra(GameService.TRY_COUNT, try_count);
-                    startService(intent);
+                    String result_points = String.format("%d Bulls %d Cows", Bulls, Cows);
+                    ResultState res = new ResultState (input_text, result_points, Integer.toString(try_count));
+                    input_view.setText(""); // clear input
+
+                    if(Bulls == number_count){
+                        String congrat =  String.format("Congratulations you passed in %d tries!", try_count);
+                        TextView congrat_view = view.findViewById(R.id.text_result);
+                        congrat_view.setText(congrat);
+                    }
+                    Cows = 0;
+                    Bulls = 0;
+                    adapter.add(res);
+                    scrollToBottom();
                 }
                 else {
                     input_view.setError("Must be 4 numbs");
                 }
+
             }
         };
 
         View.OnClickListener click_button_del= new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText input_view = findViewById(R.id.pressed_view);
+                EditText input_view = view.findViewById(R.id.pressed_view);
                 if(input_view.getText().length() != 0){
                     String text = input_view.getText().toString();
                     text = text.substring(0, (text.length() - 1));
@@ -193,7 +225,7 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener{
         View.OnClickListener click_numbers = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText input_view = findViewById(R.id.pressed_view);
+                EditText input_view = view.findViewById(R.id.pressed_view);
                 switch (v.getId()){
                     case R.id.button_0:
                         CheckText(input_view, "0"); break;
@@ -237,25 +269,4 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener{
 
     }
 
-    @Override
-    public void onComplete(ArrayList<Integer> result) {
-        this.generate = result;
-        String t = Integer.toString(generate.get(0));
-        Log.d("Activity Game", Integer.toString(generate.size()));
-    }
-
-    @Override
-    public void onGetScoresComplete(ResultState res, String congratulation) {
-        if (congratulation == null){
-            adapter.add(res);
-            input_view.setText("");
-            scrollToBottom();
-        }
-        else {
-            adapter.add(res);
-            scrollToBottom();
-            TextView congrat_view = findViewById(R.id.text_result);
-            congrat_view.setText(congratulation);
-        }
-    }
 }
