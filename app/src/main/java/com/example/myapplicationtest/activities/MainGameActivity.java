@@ -181,21 +181,23 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener,
         adapter = new ResultAdapter(MainGameActivity.this, states);
         try_list.setAdapter(adapter);
 
-
-
+        if(generate == null){
+            retainFragment.generateNumber(number_count);
+        }
 
         View.OnClickListener click_button_submit= new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (input_view.getText().toString().length() == number_count ){
                     try_count++;
-                    Intent intent = new Intent(getBaseContext(), GameService.class);
-                    intent.setAction(GameService.ACTION_PARSE_SCORES);
-                    intent.putIntegerArrayListExtra(GameService.GENERATED_NUMBERS, generate);
-                    intent.putExtra(GameService.INPUT_NUMBERS, input_view.getText().toString());
-                    intent.putExtra(GameService.NUMBER_COUNT, number_count);
-                    intent.putExtra(GameService.TRY_COUNT, try_count);
-                    startService(intent);
+                    retainFragment.getScoresResult(generate, number_count, input_view.getText().toString(), try_count);
+//                    Intent intent = new Intent(getBaseContext(), GameService.class);
+//                    intent.setAction(GameService.ACTION_PARSE_SCORES);
+//                    intent.putIntegerArrayListExtra(GameService.GENERATED_NUMBERS, generate);
+//                    intent.putExtra(GameService.INPUT_NUMBERS, input_view.getText().toString());
+//                    intent.putExtra(GameService.NUMBER_COUNT, number_count);
+//                    intent.putExtra(GameService.TRY_COUNT, try_count);
+//                    startService(intent);
                 }
                 else {
                     input_view.setError("Must be 4 numbs");
@@ -260,24 +262,11 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener,
             btn.setOnClickListener(click_numbers);
         }
 
-        if(generate == null){
-            retainFragment.generateNumber(number_count);
-           // Log.d("size", Integer.toString(generate.size()));
-            //currentTask = createGenerateNumberTask(number_count);
-
-//            //this.generate = Generate_Numbers(number_count); // Generate a number
-//            Intent intent = new Intent(this, GameService.class);
-//            intent.setAction(GameService.ACTION_GENERATE);
-//            intent.putExtra(GameService.SIZE_NUMBER, number_count);
-//            startService(intent);
-        }
     }
 
     @Override
     public void onComplete(ArrayList<Integer> result) {
-        this.generate = result;
-        String t = Integer.toString(generate.get(0));
-        Log.d("Activity Game", Integer.toString(generate.size()));
+
     }
 
     @Override
@@ -298,5 +287,10 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener,
     @Override
     public void onGenerate(ArrayList<Integer> res) {
         this.generate = res;
+    }
+
+    @Override
+    public void onResultState(ResultState result) {
+
     }
 }

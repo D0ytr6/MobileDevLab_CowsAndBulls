@@ -9,6 +9,7 @@ public class GenerateNumberCallable implements Callable<ArrayList<Integer>> {
     private int size;
 
     public GenerateNumberCallable(int size) {
+
         this.size = size;
     }
 
