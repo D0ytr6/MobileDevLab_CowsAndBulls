@@ -21,13 +21,19 @@ import com.example.myapplicationtest.R;
 import com.example.myapplicationtest.ResultAdapter;
 import com.example.myapplicationtest.ResultState;
 import com.example.myapplicationtest.TaskListener;
+import com.example.myapplicationtest.tasks.GenerateNumberCallable;
+import com.example.myapplicationtest.tasks.LooperThreadTask;
+import com.example.myapplicationtest.tasks.RetainFragment;
+import com.example.myapplicationtest.tasks.Task;
+import com.example.myapplicationtest.tasks.TaskListenerThread;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class MainGameActivity extends AppCompatActivity implements TaskListener {
+public class MainGameActivity extends AppCompatActivity implements TaskListener, RetainFragment.MainStateListener {
 
     App app;
+    private RetainFragment retainFragment;
 
     private Button submit_button, del_button, bt0, bt1, bt2, bt3, bt4, bt5, bt6, bt7, bt8, bt9;
     private LayoutInflater inflater;
@@ -46,6 +52,10 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener 
     private int try_count = 0;
     private ArrayList<Integer> generate;
 
+    public void setGenerate(ArrayList<Integer> generate) {
+        this.generate = generate;
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -56,6 +66,12 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener 
     protected void onStop() {
         super.onStop();
         app.removeListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        retainFragment.setListener(null);
     }
 
     @Override
@@ -124,6 +140,13 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener 
         super.onCreate(savedInstanceState);
         app = (App) getApplication();
 
+        this.retainFragment = (RetainFragment) getSupportFragmentManager().findFragmentByTag(RetainFragment.TAG);
+        if(retainFragment == null){
+            retainFragment = new RetainFragment();
+            getSupportFragmentManager().beginTransaction().add(retainFragment, RetainFragment.TAG).commit();
+        }
+
+        retainFragment.setListener(this);
 
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             setContentView(R.layout.activity_relative_main_window);
@@ -158,13 +181,8 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener 
         adapter = new ResultAdapter(MainGameActivity.this, states);
         try_list.setAdapter(adapter);
 
-        if(generate == null){
-            //this.generate = Generate_Numbers(number_count); // Generate a number
-            Intent intent = new Intent(this, GameService.class);
-            intent.setAction(GameService.ACTION_GENERATE);
-            intent.putExtra(GameService.SIZE_NUMBER, number_count);
-            startService(intent);
-        }
+
+
 
         View.OnClickListener click_button_submit= new View.OnClickListener() {
             @Override
@@ -242,6 +260,17 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener 
             btn.setOnClickListener(click_numbers);
         }
 
+        if(generate == null){
+            retainFragment.generateNumber(number_count);
+           // Log.d("size", Integer.toString(generate.size()));
+            //currentTask = createGenerateNumberTask(number_count);
+
+//            //this.generate = Generate_Numbers(number_count); // Generate a number
+//            Intent intent = new Intent(this, GameService.class);
+//            intent.setAction(GameService.ACTION_GENERATE);
+//            intent.putExtra(GameService.SIZE_NUMBER, number_count);
+//            startService(intent);
+        }
     }
 
     @Override
@@ -264,5 +293,10 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener 
             TextView congrat_view = findViewById(R.id.text_result);
             congrat_view.setText(congratulation);
         }
+    }
+
+    @Override
+    public void onGenerate(ArrayList<Integer> res) {
+        this.generate = res;
     }
 }

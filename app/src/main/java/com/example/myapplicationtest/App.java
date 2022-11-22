@@ -29,6 +29,8 @@ public class App extends Application {
     // Use for Service
     public void publishComplete(ArrayList<Integer> result){
         // Service always work in another thread from activity
+        // виконати в потоці Handler операцію, описану об'єктом Runnable
+        // в наступній ітерації циклу обробки повідомлень (~18 мс)
         handler.post(() ->{
             for(TaskListener listener : listeners){
                 listener.onComplete(result);
