@@ -23,7 +23,7 @@ public class App extends Application {
 
     public void removeListener(TaskListener listener){
 
-        this.listeners.add(listener);
+        this.listeners.remove(listener);
     }
 
     // Use for Service
