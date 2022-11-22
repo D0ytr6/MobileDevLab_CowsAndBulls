@@ -43,10 +43,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            setContentView(R.layout.activity_relative_start_window);
+            setContentView(R.layout.fragment_start_game_menu);
         }
         else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-            setContentView(R.layout.activity_relative_start_horizontal);
+            setContentView(R.layout.fragment_start_game_menu_horizontal);
         }
 
         if(savedInstanceState == null){

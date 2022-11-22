@@ -149,10 +149,10 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener,
         retainFragment.setListener(this);
 
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            setContentView(R.layout.activity_relative_main_window);
+            setContentView(R.layout.fragment_main_window);
         }
         else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-            setContentView(R.layout.activity_relative_main_horizontal);
+            setContentView(R.layout.fragment_main_window_horizontal);
         }
 
         if(savedInstanceState == null){
@@ -191,13 +191,6 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener,
                 if (input_view.getText().toString().length() == number_count ){
                     try_count++;
                     retainFragment.getScoresResult(generate, number_count, input_view.getText().toString(), try_count);
-//                    Intent intent = new Intent(getBaseContext(), GameService.class);
-//                    intent.setAction(GameService.ACTION_PARSE_SCORES);
-//                    intent.putIntegerArrayListExtra(GameService.GENERATED_NUMBERS, generate);
-//                    intent.putExtra(GameService.INPUT_NUMBERS, input_view.getText().toString());
-//                    intent.putExtra(GameService.NUMBER_COUNT, number_count);
-//                    intent.putExtra(GameService.TRY_COUNT, try_count);
-//                    startService(intent);
                 }
                 else {
                     input_view.setError("Must be 4 numbs");
@@ -291,6 +284,13 @@ public class MainGameActivity extends AppCompatActivity implements TaskListener,
 
     @Override
     public void onResultState(ResultState result) {
-
+        adapter.add(result);
+        input_view.setText("");
+        scrollToBottom();
+        if(result.getResult().equals("4 Bulls 0 Cows")){
+            TextView congrat_view = findViewById(R.id.text_result);
+            String congrat =  String.format("Congratulations you passed in %d tries!", try_count);
+            congrat_view.setText(congrat);
+        };
     }
 }
