@@ -49,15 +49,16 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.fragment_start_game_menu_horizontal);
         }
 
+        button_start = findViewById(R.id.start_button);
+        button_about = findViewById(R.id.about_button);
+        button_close = findViewById(R.id.close_button);
+
         if(savedInstanceState == null){
         }else {
             String Difficult = savedInstanceState.getString("dif");
             game_difficult = Difficult;
         }
 
-        button_start = findViewById(R.id.start_btn);
-        button_about = findViewById(R.id.about_btn);
-        button_close = findViewById(R.id.close_btn);
 
         drop_menu = findViewById(R.id.dropdown_menu_modes);
         menu_items_adapter = new ArrayAdapter<String>(this, R.layout.dropdown_item, difficulties);
