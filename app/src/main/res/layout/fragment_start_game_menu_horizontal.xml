@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:src="@drawable/cow_pic"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.6"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1">
+
+        <Button
+            android:id="@+id/start_button"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="0dp"
+            android:onClick="TestButton"
+            android:text="Start Game"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.35"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/difficulties"
+
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.4" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/difficulties"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:hint="Choose game mode"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.35"
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/start_button"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.4">
+
+            <AutoCompleteTextView
+                android:id="@+id/dropdown_menu_modes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/about_button"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="20dp"
+            android:text="About Developer"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.35"
+            app:layout_constraintTop_toBottomOf="@id/start_button"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/close_button"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.4" />
+
+        <Button
+            android:id="@+id/close_button"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="20dp"
+            android:text="Close"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.35"
+
+            app:layout_constraintTop_toBottomOf="@id/difficulties"
+            app:layout_constraintLeft_toRightOf="@id/about_button"
+            app:layout_constraintRight_toRightOf="parent"
+
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.4" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
